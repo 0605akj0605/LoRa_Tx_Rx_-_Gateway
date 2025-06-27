@@ -1,210 +1,112 @@
-Of course! Here is a detailed README.md file suitable for a GitHub repository, based on the provided project report. I have structured it to be comprehensive, including key diagrams and setup instructions synthesized from the document.
-
 Prototype of a Multi-Node LoRa IoT System with Cloud-Connected Dashboard
-
 ![alt text](./images/dashboard_main.png)
 
 Figure: The final real-time monitoring dashboard showing sensor locations, temporal data, and system statistics.
-
 This repository contains the full source code and documentation for a multi-node LoRa-based IoT environmental monitoring system. The project features multiple sensor nodes transmitting data over LoRa to a central gateway, which then forwards the data to a cloud database for real-time visualization on a web dashboard.
-
 This project was developed as part of an internship at the North Eastern Space Applications Centre (NESAC), Department of Space, Government of India.
-
 Table of Contents
-
 Project Overview
-
 Key Features
-
 System Architecture
-
 Hardware & Software Stack
-
 Hardware
-
 Software, Cloud & Firmware
-
 The Hardware Journey: A Critical Pivot
-
 Component Breakdown
-
 Transmitter End-Node
-
 Receiver Gateway Node
-
 Cloud Backend & Dashboard
-
 Getting Started: Setup & Installation
-
 Prerequisites
-
 1. Cloud Backend Setup (Supabase)
-
 2. Hardware Wiring
-
 3. Firmware Setup
-
 4. Web Application Setup
-
 Usage
-
 Future Enhancements
-
 Acknowledgements
-
 License
-
 Project Overview
-
 The primary objective of this project was to design and build a functional, end-to-end IoT monitoring system using LoRa (Long Range) technology. The system collects environmental data (temperature, humidity) and simulated landslide alerts from multiple distributed sensor nodes. This data is transmitted wirelessly over several hundred meters to a gateway, which uploads it to a cloud backend. A dynamic, real-time dashboard provides a user-friendly interface for monitoring the sensor network, visualizing data trends, and tracking node locations.
-
 Key Features
-
 Multi-Node LoRa Network: A star topology network with multiple transmitter nodes and a single receiver gateway.
-
 Long-Range Communication: Utilizes LoRa modulation (865 MHz band for India) for robust, long-range data transmission.
-
 Real-time Environmental Sensing: Each node is equipped with a DHT11 sensor to measure temperature and humidity.
-
 Simulated Event Trigger: Includes a push-button on each node to simulate a "landslide alert," demonstrating event-driven notifications.
-
 LoRa-to-WiFi Gateway: The receiver node acts as a gateway, bridging LoRa communication with a standard Wi-Fi connection to the internet.
-
 Cloud Data Persistence: Sensor data is stored securely in a PostgreSQL database hosted on Supabase.
-
 Interactive Web Dashboard: A Next.js application provides real-time visualization of:
-
 Geospatial plotting of sensor nodes on an interactive map (Leaflet.js).
-
 Live-updating time-series charts for temperature, humidity, and alerts (Chart.js).
-
 Overall network statistics and status.
-
 System Architecture
-
 The system follows a complete sensor-to-cloud-to-dashboard pipeline.
-
 ![alt text](./images/architecture.png)
 
 Figure: The end-to-end data flow from the sensor nodes to the user-facing dashboard.
-
 Transmitter Node: An Arduino Nano reads data from a DHT11 sensor and a push-button. It formats this data into a custom packet and sends AT commands via UART to a Wio-E5 LoRa module, which transmits the packet.
-
 Receiver Gateway: A Wio-E5 LoRa module receives the packet and passes the data via UART to an ESP8266 (NodeMCU).
-
 Cloud Upload: The ESP8266 connects to a Wi-Fi network and sends the parsed sensor data to the Supabase backend via an authenticated HTTP POST request.
-
 Database & API: Supabase automatically inserts the data into a PostgreSQL table and exposes it via its REST API.
-
 Dashboard: A Next.js web application, hosted on Vercel, fetches the initial data and subscribes to real-time updates from Supabase, displaying the information live to the user.
-
 Hardware & Software Stack
 Hardware
-
 LoRa Module: Seeed Studio Wio-E5 Development Board (based on STM32WLE5JC SoC)
-
 Transmitter Microcontroller: Arduino Nano
-
 Gateway Microcontroller: ESP8266 (NodeMCU)
-
 Sensor: DHT11 Temperature and Humidity Sensor
-
 Other: Push buttons, breadboards, connecting wires, LiPo batteries.
-
 Software, Cloud & Firmware
-
 Firmware Development: Arduino IDE
-
 Frontend Framework: Next.js (React)
-
 Backend: Serverless Functions on Vercel
-
 Database: PostgreSQL on Supabase
-
 Mapping Library: Leaflet.js
-
 Charting Library: Chart.js
-
 Real-time Communication: Socket.io / Supabase Realtime
-
 The Hardware Journey: A Critical Pivot
-
 The project initially began with low-cost Ai-Thinker Ra-02 (SX1278) modules. However, these modules exhibited extremely poor RF performance, with RSSI values around -120 dBm and negative SNR even at a 1-meter distance. This made any meaningful long-range communication impossible.
-
 After extensive troubleshooting, a strategic decision was made to pivot to the Seeed Studio Wio-E5 Development Boards. This change yielded dramatic improvements:
-
 Close Range (1m): RSSI of -10 to -15 dBm and a healthy SNR of +2 to +4 dB.
-
 Long Range (~1km): Achieved a viable connection with an RSSI of -112 to -120 dBm and an SNR of -17 to -18 dB, proving the integrated SoC design of the Wio-E5 was far superior for reliable RF performance.
-
 This experience highlighted a key takeaway: for RF-based projects, the quality and integration of the hardware platform are paramount.
-
 Component Breakdown
 Transmitter End-Node
-
 The transmitter node is responsible for sensing the environment and broadcasting the data.
-
 ![alt text](./images/transmitter_setup.png)
 
 Figure: Hardware setup for the transmitter node (Arduino Nano + Wio-E5 + DHT11).
-
 Role: Collects temperature, humidity, and alert status.
-
 Packet Format: A compact, fixed-length string {II,TT,HH,L} is used, where:
-
 II: 2-digit Node ID
-
 TT: 2-digit Temperature (°C)
-
 HH: 2-digit Humidity (%)
-
 L: 1-digit Landslide Alert (0 or 1)
-
 Example: 0125600 for Node 01, 25°C, 60% humidity, no alert.
-
 Receiver Gateway Node
-
 The gateway listens for LoRa packets and pushes them to the cloud.
-
 ![alt text](./images/receiver_setup.png)
 
 Figure: Hardware setup for the receiver gateway (ESP8266 + Wio-E5).
-
 Role: Continuously listens for LoRa packets.
-
 Function: On receiving a packet, it parses the data, connects to Wi-Fi, and makes an HTTP POST request to the Supabase API endpoint to store the data.
-
 Cloud Backend & Dashboard
-
 The backend is powered by Supabase, an open-source Firebase alternative. It provides a robust PostgreSQL database with an auto-generated REST API, which drastically simplifies data persistence.
-
 ![alt text](./images/supabase_table.png)
 
 Figure: The sensor_data table schema in the Supabase dashboard.
-
 The dashboard is a modern single-page application (SPA) built with Next.js, providing an intuitive and responsive user experience for real-time monitoring.
-
 Getting Started: Setup & Installation
 Prerequisites
-
 Arduino IDE
-
 Node.js and npm
-
 A Supabase account (free tier is sufficient)
-
 A Vercel account (for deploying the dashboard)
-
 All the hardware components listed above.
-
 1. Cloud Backend Setup (Supabase)
-
 Create a new project in Supabase.
-
 Go to the Table Editor and create a new table named sensor_data.
-
 Use the following SQL schema to create the table. You can run this in the SQL Editor. (Note: Disable Row Level Security for this table for easier prototyping, or create an appropriate policy for inserts).
-
 Generated sql
 CREATE TABLE public.sensor_data (
   id bigint NOT NULL,
@@ -218,169 +120,85 @@ CREATE TABLE public.sensor_data (
   rssi integer,
   snr integer
 );
-
-
+Use code with caution.
+SQL
 Go to Project Settings > API. Keep your Project URL and anon public key handy. You will need these for the ESP8266 firmware and the Next.js app.
-
 2. Hardware Wiring
-
 Wire the components as shown in the schematics from the report.
-
 Transmitter Node: Refer to Figure A.2 in the report appendix.
-
 Receiver Gateway Node: Refer to Figure A.3 in the report appendix.
-
 3. Firmware Setup
-
 Open the Arduino IDE. Install the necessary libraries (e.g., DHT sensor library).
-
 Open the firmware sketches located in the /firmware directory of this repository.
-
 Transmitter Firmware (/firmware/transmitter_node/transmitter_node.ino):
-
 Set a unique NODE_ID for each transmitter.
-
 Upload the sketch to the Arduino Nano.
-
 Gateway Firmware (/firmware/gateway_node/gateway_node.ino):
-
 Update the file with your Wi-Fi credentials (ssid and password).
-
 Update the file with your Supabase Project URL and anon public key.
-
 Upload the sketch to the ESP8266 (NodeMCU).
-
 Wio-E5 Configuration:
-
 Connect each Wio-E5 board to your computer and use a serial monitor (like the one in Arduino IDE).
-
 Send the following AT commands to configure them for LoRa test mode.
-
 For Transmitter Wio-E5:
-
 Generated code
 AT+MODE=TEST
 AT+TEST=RFCFG,865.0625,SF12
-IGNORE_WHEN_COPYING_START
-content_copy
-download
 Use code with caution.
-IGNORE_WHEN_COPYING_END
-
 For Receiver Wio-E5:
-
 Generated code
 AT+MODE=TEST
 AT+TEST=RFCFG,865.0625,SF12
 AT+TEST=RXLRPKT
-IGNORE_WHEN_COPYING_START
-content_copy
-download
 Use code with caution.
-IGNORE_WHEN_COPYING_END
 4. Web Application Setup
-
 Clone this repository:
-
 Generated bash
 git clone https://github.com/your-username/lora-iot-dashboard.git
 cd lora-iot-dashboard
-IGNORE_WHEN_COPYING_START
-content_copy
-download
 Use code with caution.
 Bash
-IGNORE_WHEN_COPYING_END
-
 Navigate to the web application directory:
-
 Generated bash
 cd web-dashboard
-IGNORE_WHEN_COPYING_START
-content_copy
-download
 Use code with caution.
 Bash
-IGNORE_WHEN_COPYING_END
-
 Install dependencies:
-
 Generated bash
 npm install
-IGNORE_WHEN_COPYING_START
-content_copy
-download
 Use code with caution.
 Bash
-IGNORE_WHEN_COPYING_END
-
 Create an environment file by copying the example:
-
 Generated bash
 cp .env.local.example .env.local
-IGNORE_WHEN_COPYING_START
-content_copy
-download
 Use code with caution.
 Bash
-IGNORE_WHEN_COPYING_END
-
 Edit .env.local and add your Supabase URL and anon key:
-
 Generated code
 NEXT_PUBLIC_SUPABASE_URL=YOUR_SUPABASE_PROJECT_URL
 NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
-IGNORE_WHEN_COPYING_START
-content_copy
-download
 Use code with caution.
-IGNORE_WHEN_COPYING_END
-
 Run the development server:
-
 Generated bash
 npm run dev
-IGNORE_WHEN_COPYING_START
-content_copy
-download
 Use code with caution.
 Bash
-IGNORE_WHEN_COPYING_END
-
 Open http://localhost:3000 in your browser to see the dashboard.
-
 Usage
-
 Power on all transmitter nodes and the receiver gateway.
-
 The gateway will automatically connect to your Wi-Fi network.
-
 As the transmitters send data, the gateway will upload it to Supabase.
-
 Open the dashboard URL to see the data appearing in real-time.
-
 Press the button on any transmitter node to send a landslide alert and see it reflected on the dashboard.
-
 Future Enhancements
-
 This project serves as a strong foundation. Future work could include:
-
 Full LoRaWAN Implementation: Replace the custom LoRa implementation with a full LoRaWAN stack (e.g., using The Things Network) to enable features like Adaptive Data Rate (ADR) and greater scalability.
-
 Power Consumption Analysis: Implement deep sleep modes on the end-nodes to drastically extend battery life for long-term remote deployments.
-
 Integration of Additional Sensors: Add more sensors like soil moisture, air quality (PM2.5), or accelerometers for more sophisticated use cases.
-
 Real-World Deployment: Deploy the network in a challenging environment (e.g., a farm or hilly area) to test its range, reliability, and resilience over a long period.
-
 Acknowledgements
-
 My deepest gratitude to Dr. Anjan Debnath, Scientist-F at NE-SAC, for his invaluable mentorship, guidance, and support.
-
 A special thanks to my friend and co-intern, Pratham Agarwal, for his constant encouragement and technical support.
-
 Appreciation to the members of Team Antriksha, whose participation in the Bhartiya Antriksha Hackathon 2024 laid the foundation for this opportunity.
-
 License
-
 This project is licensed under the MIT License. See the LICENSE file for details.
