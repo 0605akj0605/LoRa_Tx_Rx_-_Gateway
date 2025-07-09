@@ -1,9 +1,9 @@
 
 # 🌱 Prototype of a Multi-Node LoRa IoT System with Cloud-Connected Dashboard for Real-Time Monitoring
 
-> **Author:** Aditya Krishna Jaiswal
-> **Institution:** Indian Institute of Information Technology Guwahati 
-> **Mentor:** Dr. Anjan Debnath, Scientist-F, North Eastern Space Applications Centre, Department of Space, Government of India
+* **Author:** Aditya Krishna Jaiswal
+* **Institution:** Indian Institute of Information Technology Guwahati 
+* **Mentor:** Dr. Anjan Debnath, Scientist-F, North Eastern Space Applications Centre, Department of Space, Government of India
 
 ---
 
@@ -117,8 +117,8 @@ Full list in [report bibliography](https://github.com/0605akj0605/LoRa_Tx_Rx_-_G
 
 ## 📥 Source Code & Report
 
-🔗 [GitHub Repository](https://github.com/0605akj0605/LoRa_Tx_Rx_-_Gateway)
-For the code for interactive dashboard please have a look [here](https://github.com/pratham-011ag/LORAA) Courtesy:- Pratham Agarwal
+* 🔗 [GitHub Repository](https://github.com/0605akj0605/LoRa_Tx_Rx_-_Gateway)
+* For the code for interactive dashboard please have a look [here](https://github.com/pratham-011ag/LORAA). Courtesy:- Pratham Agarwal
 ---
 
 ## 🙏 Acknowledgement
