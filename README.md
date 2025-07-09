@@ -118,7 +118,7 @@ Full list in [report bibliography](https://github.com/0605akj0605/LoRa_Tx_Rx_-_G
 ## 📥 Source Code & Report
 
 🔗 [GitHub Repository](https://github.com/0605akj0605/LoRa_Tx_Rx_-_Gateway)
-
+For the code for interactive dashboard please have a look [here](https://github.com/pratham-011ag/LORAA) Courtesy:- Pratham Agarwal
 ---
 
 ## 🙏 Acknowledgement
