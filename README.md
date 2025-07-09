@@ -2,7 +2,7 @@
 # 🌱 Prototype of a Multi-Node LoRa IoT System with Cloud-Connected Dashboard for Real-Time Monitoring
 
 > **Author:** Aditya Krishna Jaiswal
-> **Institution:** Indian Institute of Information Technology Guwahati
+> **Institution:** Indian Institute of Information Technology Guwahati 
 > **Mentor:** Dr. Anjan Debnath, Scientist-F, North Eastern Space Applications Centre, Department of Space, Government of India
 
 ---
@@ -20,7 +20,7 @@ It demonstrates how long-range, low-power wireless communication (LoRa) can be c
 * 🛠 **Hardware**: Wio-E5 development boards (STM32WLE5JC), DHT11 sensors, ESP8266 Wi-Fi modules
 * ☁️ **Cloud integration**: Real-time data upload to Supabase PostgreSQL database
 * 📊 **Dashboard**: Live visualization with maps and charts (built using Next.js, Leaflet.js, Chart.js)
-* 🔧 **AT command-based LoRa communication** for rapid prototyping
+* 🔧 **AT command-based LoRa communication** for rapid prototyping with Wio E-5 Development report.
 * 🧪 **Simulated landslide detection** using push-button events
 
 ---
@@ -41,6 +41,7 @@ It demonstrates how long-range, low-power wireless communication (LoRa) can be c
 
 ## 🛠 Hardware Used
 
+* **LoRa AI Thinker 2** (based on SX127X) modules
 * **Wio-E5 Development Boards (STM32WLE5JC SoC)**
 * **DHT11**: Temperature & humidity sensor
 * **ESP8266**: Adds Wi-Fi capability to the receiver for cloud integration
